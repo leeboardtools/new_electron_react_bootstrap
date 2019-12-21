@@ -370,7 +370,7 @@ test('A Test', () => {
 
 You should then be able to run the ```npm test``` script which should run Jest, resulting in an output like:
 
-```text
+```txt
  PASS  src/myFile.test.js
   ✓ A Test
 
@@ -383,3 +383,38 @@ Ran all test suites related to changed files.
 Watch Usage: Press w to show more.
 ```
 
+## Install ESLint
+[ESLint](https://eslint.org/) is a Javascript linter that statically analyzes the code.
+
+1. Install ESLint:
+
+```node
+npm i eslint eslint-plugin-react --save-dev
+```
+
+2. Create the configuration file:
+
+```node
+npx eslint --init
+```
+
+The following answers were given for this project:
+
+```txt
+? How would you like to use ESLint? To check syntax, find problems, and enforce code style
+? What type of modules does your project use? JavaScript modules (import/export)
+? Which framework does your project use? React
+? Does your project use TypeScript? No
+? Where does your code run? Browser, Node
+? How would you like to define a style for your project? Answer questions about your style
+? What format do you want your config file to be in? JavaScript
+? What style of indentation do you use? Spaces
+? What quotes do you use for strings? Single
+? What line endings do you use? Unix
+? Do you require semicolons? Yes
+The config that you've selected requires the following dependencies:
+
+eslint-plugin-react@latest
+Warning: React version not specified in eslint-plugin-react settings. See https://github.com/yannickcr/eslint-plugin-react#configuration .
+Successfully created .eslintrc.js file in /home/albert/Projects/Javascript/test/test
+```
