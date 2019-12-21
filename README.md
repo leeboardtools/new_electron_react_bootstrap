@@ -25,7 +25,7 @@ npm i @babel/core @babel/preset-env @babel/preset-react --save-dev
 2. Configure Babel. Create a file called `.babelrc` at the root of the project (where `package.json` is) and add the following to it:
 
 ```json
-  "babel": {
+  {
     "presets": [
       "@babel/env",
       "@babel/react"
@@ -109,3 +109,73 @@ to:
 
 Note that it points to the ```app``` folder, not the ```src```, since ```app``` is where Gulp sends all the processed output, including the output files of Babel.
 
+## Install React
+[React](https://reactjs.org/) is what this project uses to build the UI.
+
+1. Install React:
+
+```node
+npm i react react-dom --save-dev
+```
+
+2. We need to enable the use of ```node``` in the browser window. In ```src/main.js``` change the following code block:
+
+```js
+  // Create the browser window.
+  mainWindow = new BrowserWindow({
+    width: 800,
+    height: 600,
+  });
+```
+
+to be:
+```js
+  // Create the browser window.
+  mainWindow = new BrowserWindow({
+    width: 800,
+    height: 600,
+    webPreferences: {
+      nodeIntegration: true,
+    }
+  });
+```
+
+If you don't do this then the simplest things like ```require()``` calls will generate errors when you try to run the project.
+
+3. Create an App component. Create the file ```src/App.jsx``` and add the following to it:
+
+```js
+import React from 'react';
+
+export default function App() {
+    return <div>I'm the React App</div>;
+}
+```
+
+4. Create the main renderer process entry point. Create the file ```src/renderer.js``` and add the following to it:
+
+```js
+import React from 'react';
+import ReactDOM from 'react-dom';
+//import {AppContainer} from 'react-hot-loader';
+//require('bootstrap');
+
+const render = () => {
+  const App = require('./App').default;
+  ReactDOM.render(<App />, document.getElementById('App'));
+}
+
+render();
+if (module.hot) {
+  module.hot.accept(render);
+}
+```
+
+5. Update ```index.html``` to load ```src/renderer.js``` and work with it. Modify the contents of the ```<body>``` tag so it reads:
+
+```html
+  <body>
+    <div id="App">Oh no.</div>
+    <script src="./renderer.js"></script>
+  </body>
+```
