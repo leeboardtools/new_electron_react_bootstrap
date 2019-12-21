@@ -92,3 +92,20 @@ which is within the ```start``` block, to:
 ```json
     "start": "gulp start",
 ```
+
+4. Rename ```index.js```. Later on we'll add a JS file loaded by ```index.html``` that will be the entry point of the render processes. To avoid confusion we'll rename the existing ```index.js``` as ```main.js```.
+
+5. Update ```package.json``` to point to ```main.js```. In ```package.json``` change the line:
+
+```json
+    "main": "src/index.js",
+```
+
+to:
+
+```json
+"main": "app/main.js",
+```
+
+Note that it points to the ```app``` folder, not the ```src```, since ```app``` is where Gulp sends all the processed output, including the output files of Babel.
+
