@@ -1,0 +1,57 @@
+const {
+  app,
+  BrowserWindow
+} = require('electron');
+
+const path = require('path'); // Handle creating/removing shortcuts on Windows when installing/uninstalling.
+
+
+if (require('electron-squirrel-startup')) {
+  // eslint-disable-line global-require
+  app.quit();
+} // Keep a global reference of the window object, if you don't, the window will
+// be closed automatically when the JavaScript object is garbage collected.
+
+
+let mainWindow;
+
+const createWindow = () => {
+  // Create the browser window.
+  mainWindow = new BrowserWindow({
+    width: 800,
+    height: 600
+  }); // and load the index.html of the app.
+
+  mainWindow.loadFile(path.join(__dirname, 'index.html')); // Open the DevTools.
+
+  mainWindow.webContents.openDevTools(); // Emitted when the window is closed.
+
+  mainWindow.on('closed', () => {
+    // Dereference the window object, usually you would store windows
+    // in an array if your app supports multi windows, this is the time
+    // when you should delete the corresponding element.
+    mainWindow = null;
+  });
+}; // This method will be called when Electron has finished
+// initialization and is ready to create browser windows.
+// Some APIs can only be used after this event occurs.
+
+
+app.on('ready', createWindow); // Quit when all windows are closed.
+
+app.on('window-all-closed', () => {
+  // On OS X it is common for applications and their menu bar
+  // to stay active until the user quits explicitly with Cmd + Q
+  if (process.platform !== 'darwin') {
+    app.quit();
+  }
+});
+app.on('activate', () => {
+  // On OS X it's common to re-create a window in the app when the
+  // dock icon is clicked and there are no other windows open.
+  if (mainWindow === null) {
+    createWindow();
+  }
+}); // In this file you can include the rest of your app's specific main process
+// code. You can also put them in separate files and import them here.
+//# sourceMappingURL=data:application/json;charset=utf8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImluZGV4LmpzIl0sIm5hbWVzIjpbImFwcCIsIkJyb3dzZXJXaW5kb3ciLCJyZXF1aXJlIiwicGF0aCIsInF1aXQiLCJtYWluV2luZG93IiwiY3JlYXRlV2luZG93Iiwid2lkdGgiLCJoZWlnaHQiLCJsb2FkRmlsZSIsImpvaW4iLCJfX2Rpcm5hbWUiLCJ3ZWJDb250ZW50cyIsIm9wZW5EZXZUb29scyIsIm9uIiwicHJvY2VzcyIsInBsYXRmb3JtIl0sIm1hcHBpbmdzIjoiQUFBQSxNQUFNO0FBQUVBLEVBQUFBLEdBQUY7QUFBT0MsRUFBQUE7QUFBUCxJQUF5QkMsT0FBTyxDQUFDLFVBQUQsQ0FBdEM7O0FBQ0EsTUFBTUMsSUFBSSxHQUFHRCxPQUFPLENBQUMsTUFBRCxDQUFwQixDLENBRUE7OztBQUNBLElBQUlBLE9BQU8sQ0FBQywyQkFBRCxDQUFYLEVBQTBDO0FBQUU7QUFDMUNGLEVBQUFBLEdBQUcsQ0FBQ0ksSUFBSjtBQUNELEMsQ0FFRDtBQUNBOzs7QUFDQSxJQUFJQyxVQUFKOztBQUVBLE1BQU1DLFlBQVksR0FBRyxNQUFNO0FBQ3pCO0FBQ0FELEVBQUFBLFVBQVUsR0FBRyxJQUFJSixhQUFKLENBQWtCO0FBQzdCTSxJQUFBQSxLQUFLLEVBQUUsR0FEc0I7QUFFN0JDLElBQUFBLE1BQU0sRUFBRTtBQUZxQixHQUFsQixDQUFiLENBRnlCLENBT3pCOztBQUNBSCxFQUFBQSxVQUFVLENBQUNJLFFBQVgsQ0FBb0JOLElBQUksQ0FBQ08sSUFBTCxDQUFVQyxTQUFWLEVBQXFCLFlBQXJCLENBQXBCLEVBUnlCLENBVXpCOztBQUNBTixFQUFBQSxVQUFVLENBQUNPLFdBQVgsQ0FBdUJDLFlBQXZCLEdBWHlCLENBYXpCOztBQUNBUixFQUFBQSxVQUFVLENBQUNTLEVBQVgsQ0FBYyxRQUFkLEVBQXdCLE1BQU07QUFDNUI7QUFDQTtBQUNBO0FBQ0FULElBQUFBLFVBQVUsR0FBRyxJQUFiO0FBQ0QsR0FMRDtBQU1ELENBcEJELEMsQ0FzQkE7QUFDQTtBQUNBOzs7QUFDQUwsR0FBRyxDQUFDYyxFQUFKLENBQU8sT0FBUCxFQUFnQlIsWUFBaEIsRSxDQUVBOztBQUNBTixHQUFHLENBQUNjLEVBQUosQ0FBTyxtQkFBUCxFQUE0QixNQUFNO0FBQ2hDO0FBQ0E7QUFDQSxNQUFJQyxPQUFPLENBQUNDLFFBQVIsS0FBcUIsUUFBekIsRUFBbUM7QUFDakNoQixJQUFBQSxHQUFHLENBQUNJLElBQUo7QUFDRDtBQUNGLENBTkQ7QUFRQUosR0FBRyxDQUFDYyxFQUFKLENBQU8sVUFBUCxFQUFtQixNQUFNO0FBQ3ZCO0FBQ0E7QUFDQSxNQUFJVCxVQUFVLEtBQUssSUFBbkIsRUFBeUI7QUFDdkJDLElBQUFBLFlBQVk7QUFDYjtBQUNGLENBTkQsRSxDQVFBO0FBQ0EiLCJzb3VyY2VzQ29udGVudCI6WyJjb25zdCB7IGFwcCwgQnJvd3NlcldpbmRvdyB9ID0gcmVxdWlyZSgnZWxlY3Ryb24nKTtcbmNvbnN0IHBhdGggPSByZXF1aXJlKCdwYXRoJyk7XG5cbi8vIEhhbmRsZSBjcmVhdGluZy9yZW1vdmluZyBzaG9ydGN1dHMgb24gV2luZG93cyB3aGVuIGluc3RhbGxpbmcvdW5pbnN0YWxsaW5nLlxuaWYgKHJlcXVpcmUoJ2VsZWN0cm9uLXNxdWlycmVsLXN0YXJ0dXAnKSkgeyAvLyBlc2xpbnQtZGlzYWJsZS1saW5lIGdsb2JhbC1yZXF1aXJlXG4gIGFwcC5xdWl0KCk7XG59XG5cbi8vIEtlZXAgYSBnbG9iYWwgcmVmZXJlbmNlIG9mIHRoZSB3aW5kb3cgb2JqZWN0LCBpZiB5b3UgZG9uJ3QsIHRoZSB3aW5kb3cgd2lsbFxuLy8gYmUgY2xvc2VkIGF1dG9tYXRpY2FsbHkgd2hlbiB0aGUgSmF2YVNjcmlwdCBvYmplY3QgaXMgZ2FyYmFnZSBjb2xsZWN0ZWQuXG5sZXQgbWFpbldpbmRvdztcblxuY29uc3QgY3JlYXRlV2luZG93ID0gKCkgPT4ge1xuICAvLyBDcmVhdGUgdGhlIGJyb3dzZXIgd2luZG93LlxuICBtYWluV2luZG93ID0gbmV3IEJyb3dzZXJXaW5kb3coe1xuICAgIHdpZHRoOiA4MDAsXG4gICAgaGVpZ2h0OiA2MDAsXG4gIH0pO1xuXG4gIC8vIGFuZCBsb2FkIHRoZSBpbmRleC5odG1sIG9mIHRoZSBhcHAuXG4gIG1haW5XaW5kb3cubG9hZEZpbGUocGF0aC5qb2luKF9fZGlybmFtZSwgJ2luZGV4Lmh0bWwnKSk7XG5cbiAgLy8gT3BlbiB0aGUgRGV2VG9vbHMuXG4gIG1haW5XaW5kb3cud2ViQ29udGVudHMub3BlbkRldlRvb2xzKCk7XG5cbiAgLy8gRW1pdHRlZCB3aGVuIHRoZSB3aW5kb3cgaXMgY2xvc2VkLlxuICBtYWluV2luZG93Lm9uKCdjbG9zZWQnLCAoKSA9PiB7XG4gICAgLy8gRGVyZWZlcmVuY2UgdGhlIHdpbmRvdyBvYmplY3QsIHVzdWFsbHkgeW91IHdvdWxkIHN0b3JlIHdpbmRvd3NcbiAgICAvLyBpbiBhbiBhcnJheSBpZiB5b3VyIGFwcCBzdXBwb3J0cyBtdWx0aSB3aW5kb3dzLCB0aGlzIGlzIHRoZSB0aW1lXG4gICAgLy8gd2hlbiB5b3Ugc2hvdWxkIGRlbGV0ZSB0aGUgY29ycmVzcG9uZGluZyBlbGVtZW50LlxuICAgIG1haW5XaW5kb3cgPSBudWxsO1xuICB9KTtcbn07XG5cbi8vIFRoaXMgbWV0aG9kIHdpbGwgYmUgY2FsbGVkIHdoZW4gRWxlY3Ryb24gaGFzIGZpbmlzaGVkXG4vLyBpbml0aWFsaXphdGlvbiBhbmQgaXMgcmVhZHkgdG8gY3JlYXRlIGJyb3dzZXIgd2luZG93cy5cbi8vIFNvbWUgQVBJcyBjYW4gb25seSBiZSB1c2VkIGFmdGVyIHRoaXMgZXZlbnQgb2NjdXJzLlxuYXBwLm9uKCdyZWFkeScsIGNyZWF0ZVdpbmRvdyk7XG5cbi8vIFF1aXQgd2hlbiBhbGwgd2luZG93cyBhcmUgY2xvc2VkLlxuYXBwLm9uKCd3aW5kb3ctYWxsLWNsb3NlZCcsICgpID0+IHtcbiAgLy8gT24gT1MgWCBpdCBpcyBjb21tb24gZm9yIGFwcGxpY2F0aW9ucyBhbmQgdGhlaXIgbWVudSBiYXJcbiAgLy8gdG8gc3RheSBhY3RpdmUgdW50aWwgdGhlIHVzZXIgcXVpdHMgZXhwbGljaXRseSB3aXRoIENtZCArIFFcbiAgaWYgKHByb2Nlc3MucGxhdGZvcm0gIT09ICdkYXJ3aW4nKSB7XG4gICAgYXBwLnF1aXQoKTtcbiAgfVxufSk7XG5cbmFwcC5vbignYWN0aXZhdGUnLCAoKSA9PiB7XG4gIC8vIE9uIE9TIFggaXQncyBjb21tb24gdG8gcmUtY3JlYXRlIGEgd2luZG93IGluIHRoZSBhcHAgd2hlbiB0aGVcbiAgLy8gZG9jayBpY29uIGlzIGNsaWNrZWQgYW5kIHRoZXJlIGFyZSBubyBvdGhlciB3aW5kb3dzIG9wZW4uXG4gIGlmIChtYWluV2luZG93ID09PSBudWxsKSB7XG4gICAgY3JlYXRlV2luZG93KCk7XG4gIH1cbn0pO1xuXG4vLyBJbiB0aGlzIGZpbGUgeW91IGNhbiBpbmNsdWRlIHRoZSByZXN0IG9mIHlvdXIgYXBwJ3Mgc3BlY2lmaWMgbWFpbiBwcm9jZXNzXG4vLyBjb2RlLiBZb3UgY2FuIGFsc28gcHV0IHRoZW0gaW4gc2VwYXJhdGUgZmlsZXMgYW5kIGltcG9ydCB0aGVtIGhlcmUuXG4iXSwiZmlsZSI6ImluZGV4LmpzIn0=
