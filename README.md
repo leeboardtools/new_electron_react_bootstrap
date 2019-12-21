@@ -489,6 +489,13 @@ Successfully created .eslintrc.js file in /home/albert/Projects/Javascript/test/
     },
 ```
 
+5. Update ```eslintrc.js``` to support Jest. Add the following to the ```env``` property of the  ```module.settings``` object in ```eslintrc.js```:
+
+```js
+        'jest': true,
+```
+
+
 ## Configure Markdown Lint
 Markdown has its own linting via the [markdownlint](https://github.com/DavidAnson/vscode-markdownlint) VSCode extension.
 
