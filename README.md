@@ -375,11 +375,41 @@ module.exports = {
 };
 ```
 
+6. For ```async``` function support, first install:
+
+```node
+npm i regenerator-runtime
+```
+
+7. Create a file ```src/setupTests.js``` and add the following to it:
+
+```js
+import 'regenerator-runtime/runtime';
+```
+
+8. Edit ```package.json```, setting the ```setupFilesAfterEnv``` property of the ```jest``` section to:
+
+```json
+    "setupFilesAfterEnv": [
+      "./src/setupTests.js"
+    ],
+```
+
 6. To see that Jest runs, create a file ```src/myFile.test.js``` and add the following to it:
 
 ```js
 test('A Test', () => {
     expect(true).toBeTruthy();
+});
+
+test('Async Test', async () => {
+    const result = await new Promise((resolve) => {
+        setTimeout(() => {
+            resolve(true);
+        },
+        10);
+    });
+    expect(result).toBeTruthy();
 });
 ```
 
