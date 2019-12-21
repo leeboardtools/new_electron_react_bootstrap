@@ -74,7 +74,7 @@ module.exports = {
         "no-new-func": "error",
         "no-new-object": "error",
         "no-whitespace-before-property": "error",
-        "object-property-newline": "error",
+        "object-property-newline": ["error", {"allowAllPropertiesOnSameLine": true}],
         "semi-spacing": "error",
         "space-before-blocks": "error",
         "space-unary-ops": "error",
