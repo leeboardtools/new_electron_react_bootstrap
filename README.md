@@ -179,3 +179,47 @@ if (module.hot) {
     <script src="./renderer.js"></script>
   </body>
 ```
+
+## Install React Developer Tools
+React Developer Tools is a Chrome extension that adds React debugging tools to Chrome Developer Tools. In Electron it is part of the [DevTools Extension](https://electronjs.org/docs/tutorial/devtools-extension).
+
+1. Install the tools:
+
+```node
+npm i electron-devtools-installer --save-dev
+```
+
+2. Edit ```src/main.js``` to load the tools. Add the following:
+
+```js
+import installExtension, { REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer';
+```
+
+to the top of the file.
+
+3. Add the following:
+
+```js
+    const isDevMode = process.execPath.match(/[\\/]electron/);
+    if (isDevMode) {
+        installExtension(REACT_DEVELOPER_TOOLS);
+    }
+```
+
+after the ```imports```/```require()```s.
+
+4. While we've added ```isDevMode```, we might as well bracket the opening of the main DevTools. Replace the following lines:
+
+```js
+  // Open the DevTools.
+  mainWindow.webContents.openDevTools();
+```
+
+with
+
+```js
+  if (isDevMode) {
+    // Open the DevTools.
+    mainWindow.webContents.openDevTools();
+  }
+```

@@ -1,5 +1,11 @@
+import installExtension, { REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer';
 const { app, BrowserWindow } = require('electron');
 const path = require('path');
+
+const isDevMode = process.execPath.match(/[\\/]electron/);
+if (isDevMode) {
+  installExtension(REACT_DEVELOPER_TOOLS);
+}
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) { // eslint-disable-line global-require
@@ -23,8 +29,10 @@ const createWindow = () => {
   // and load the index.html of the app.
   mainWindow.loadFile(path.join(__dirname, 'index.html'));
 
-  // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+  if (isDevMode) {
+    // Open the DevTools.
+    mainWindow.webContents.openDevTools();
+  }
 
   // Emitted when the window is closed.
   mainWindow.on('closed', () => {
