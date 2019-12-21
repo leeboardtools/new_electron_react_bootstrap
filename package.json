@@ -9,7 +9,9 @@
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
-    "lint": "echo \"No linting configured\""
+    "lint": "echo \"No linting configured\"",
+    "test": "jest --watch",
+    "test-once": "jest"
   },
   "keywords": [],
   "author": "albert",
@@ -53,12 +55,62 @@
     "@electron-forge/maker-rpm": "^6.0.0-beta.47",
     "@electron-forge/maker-squirrel": "^6.0.0-beta.47",
     "@electron-forge/maker-zip": "^6.0.0-beta.47",
+    "babel-jest": "^24.9.0",
     "electron": "7.1.7",
     "electron-devtools-installer": "^2.2.4",
     "gulp": "^4.0.2",
     "gulp-babel": "^8.0.0",
     "gulp-sourcemaps": "^2.6.5",
+    "jest": "^24.9.0",
+    "jest-environment-jsdom-fourteen": "^1.0.1",
+    "jest-watch-typeahead": "^0.4.2",
     "react": "^16.12.0",
+    "react-app-polyfill": "^1.0.5",
     "react-dom": "^16.12.0"
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx,ts,tsx}",
+      "!src/**/*.d.ts"
+    ],
+    "setupFiles": [
+      "react-app-polyfill/jsdom"
+    ],
+    "setupFilesAfterEnv": [],
+    "testMatch": [
+      "<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}",
+      "<rootDir>/src/**/*.{spec,test}.{js,jsx,ts,tsx}"
+    ],
+    "testEnvironment": "jest-environment-jsdom-fourteen",
+    "transform": {
+      "^.+\\.(js|jsx|ts|tsx)$": "<rootDir>/node_modules/babel-jest",
+      "^.+\\.css$": "<rootDir>/config/jest/cssTransform.js",
+      "^(?!.*\\.(js|jsx|ts|tsx|css|json)$)": "<rootDir>/config/jest/fileTransform.js"
+    },
+    "transformIgnorePatterns": [
+      "[/\\\\]node_modules[/\\\\].+\\.(js|jsx|ts|tsx)$",
+      "^.+\\.module\\.(css|sass|scss)$"
+    ],
+    "modulePaths": [],
+    "moduleNameMapper": {
+      "^react-native$": "react-native-web",
+      "^.+\\.module\\.(css|sass|scss)$": "identity-obj-proxy"
+    },
+    "moduleFileExtensions": [
+      "web.js",
+      "js",
+      "web.ts",
+      "ts",
+      "web.tsx",
+      "tsx",
+      "json",
+      "web.jsx",
+      "jsx",
+      "node"
+    ],
+    "watchPlugins": [
+      "jest-watch-typeahead/filename",
+      "jest-watch-typeahead/testname"
+    ]
   }
 }
