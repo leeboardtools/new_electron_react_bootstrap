@@ -1,4 +1,17 @@
-# Electron-React-Jest-Eslint-Bootstrap Boilerplate
+# Electron-React-Jest-ESLint-Bootstrap Boilerplate
+
+This boilerplate is my starting point for projects with the following:
+
+- [Electron](https://electronjs.org/)
+- [React](https://reactjs.org/)
+- [Jest](https://jestjs.io/)
+- [ESLint](https://eslint.org/)
+- [Bootstrap](https://getbootstrap.com/)
+
+It uses [Electron Forge](https://www.electronforge.io/)'s ```create-electron-app``` to create the initial project.
+
+It also incorporates [Babel](https://babeljs.io/) and [Gulp](https://gulpjs.com/).
+
 
 Prerequisite: A newish version of [node.js](https://nodejs.org/) should already be installed (v11.15.0 was used here).
 
