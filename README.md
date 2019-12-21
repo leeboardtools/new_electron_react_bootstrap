@@ -489,3 +489,25 @@ Markdown has its own linting via the [markdownlint](https://github.com/DavidAnso
     "ol-prefix": false
 }
 ```
+
+
+## Install Bootstrap
+[Bootstrap](https://getbootstrap.com/) is a UI library that defines many components via CSS.
+
+1. Install Bootstrap:
+
+```node
+npm i bootstrap
+```
+
+2. Install [jQuery](https://jquery.com/) and [Popper.js](https://popper.js.org/), which are only required for certain Bootstrap components:
+
+```node
+npm i jquery popper.js
+```
+
+3. Update ```index.html``` with the Bootstrap CSS. Add the following to the ```<head>``` section of ```index.html```:
+
+```html
+  <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
+```
