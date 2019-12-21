@@ -1,4 +1,4 @@
-# Electron-React-Jest-Eslint Boilerplate
+# Electron-React-Jest-Eslint-Bootstrap Boilerplate
 
 Prerequisite: A newish version of [node.js](https://nodejs.org/) should already be installed (v11.15.0 was used here).
 
@@ -417,4 +417,59 @@ The config that you've selected requires the following dependencies:
 eslint-plugin-react@latest
 Warning: React version not specified in eslint-plugin-react settings. See https://github.com/yannickcr/eslint-plugin-react#configuration .
 Successfully created .eslintrc.js file in /home/albert/Projects/Javascript/test/test
+```
+
+3. Modify the ESLint configuration file rules as desired. The following were added to the file ```.eslintrc```:
+
+```js
+        "no-multi-spaces": ["error", {"ignoreEOLComments": true}],
+        "comma-dangle": "off",
+        "operator-linebreak": [ "error", "before", { "overrides": { "+": "before", "?": "before", ":": "before", "=": "after" }} ],
+        "padded-blocks": "off",
+        "brace-style": ["error", "stroustrup", { "allowSingleLine": true }],
+        "space-before-function-paren": ["error", {"named": "never"}],
+        "keyword-spacing": "error",
+        "space-infix-ops": "error",
+        "comma-spacing": "error",
+        "eqeqeq": "error",
+        "curly": "error",
+        "one-var": ["error", "never"],
+        "block-spacing": "error",
+        "comma-style": ["error", "last"],
+        "dot-location": ["error", "property"],
+        "func-call-spacing": "error",
+        "new-cap": "error",
+        "new-parens": "error",
+        "constructor-super": "error",
+        "no-array-constructor": "error",
+        "no-caller": "error",
+        "no-eval": "error",
+        "no-extend-native": "error",
+        "no-labels": "error",
+        "no-new": "error",
+        "no-new-func": "error",
+        "no-new-object": "error",
+        "no-whitespace-before-property": "error",
+        "object-property-newline": "error",
+        "semi-spacing": "error",
+        "space-before-blocks": "error",
+        "space-unary-ops": "error",
+        "use-isnan": "error",
+        "valid-typeof": "error",
+        "wrap-iife": "error",
+        "jsx-quotes": ["error", "prefer-double"],
+        "react/jsx-indent": ["error", 4],
+        "react/jsx-indent-props": ["error", 4],
+        "react/jsx-handler-names": "off",
+        "react/prefer-stateless-function": 0
+```
+
+4. Update ```eslintrc.js``` to remove React version warning. Add the following to the ```module.settings``` object in ```eslintrc.js```:
+
+```js
+    'settings': {
+        "react": {
+            "version": "detect",
+        }
+    },
 ```
