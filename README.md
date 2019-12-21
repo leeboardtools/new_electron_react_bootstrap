@@ -109,6 +109,7 @@ to:
 
 Note that it points to the ```app``` folder, not the ```src```, since ```app``` is where Gulp sends all the processed output, including the output files of Babel.
 
+
 ## Install React
 [React](https://reactjs.org/) is what this project uses to build the UI.
 
@@ -129,6 +130,7 @@ npm i react react-dom --save-dev
 ```
 
 to be:
+
 ```js
   // Create the browser window.
   mainWindow = new BrowserWindow({
@@ -472,4 +474,18 @@ Successfully created .eslintrc.js file in /home/albert/Projects/Javascript/test/
             "version": "detect",
         }
     },
+```
+
+## Configure Markdown Lint
+Markdown has its own linting via the [markdownlint](https://github.com/DavidAnson/vscode-markdownlint) VSCode extension.
+
+1. Create the file ```.markdownlint.json```. The following rules were added to it:
+
+```json
+{
+    "blanks-around-headings": { "lines_below": 0 },
+    "no-multiple-blanks": false,
+    "line-length": false,
+    "ol-prefix": false
+}
 ```
