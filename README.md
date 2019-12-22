@@ -494,6 +494,7 @@ Successfully created .eslintrc.js file in /home/albert/Projects/Javascript/test/
         "no-new": "error",
         "no-new-func": "error",
         "no-new-object": "error",
+        "no-unused-vars": ["error", { "args": "none" }],
         "no-whitespace-before-property": "error",
         "object-property-newline": ["error", {"allowAllPropertiesOnSameLine": true}],
         "semi-spacing": "error",
