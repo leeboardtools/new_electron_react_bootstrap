@@ -535,8 +535,10 @@ Markdown has its own linting via the [markdownlint](https://github.com/DavidAnso
 ```json
 {
     "blanks-around-headings": { "lines_below": 0 },
+    "blanks-around-lists": false,
     "no-multiple-blanks": false,
     "line-length": false,
+    "ul-indent": { "indent": 4},
     "ol-prefix": false
 }
 ```
