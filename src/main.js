@@ -1,6 +1,5 @@
 import installExtension, { REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer';
-const { app, BrowserWindow } = require('electron');
-const path = require('path');
+const { app, BrowserWindow, session } = require('electron');
 
 const isDevMode = process.execPath.match(/[\\/]electron/);
 if (isDevMode) {
@@ -12,35 +11,45 @@ if (require('electron-squirrel-startup')) { // eslint-disable-line global-requir
     app.quit();
 }
 
-// Keep a global reference of the window object, if you don't, the window will
-// be closed automatically when the JavaScript object is garbage collected.
-let mainWindow;
-
 const createWindow = () => {
+    // TODO isDevMode test is a hack to get the devTools to show up, as it's
+    // currently broken
+    if (!isDevMode) {
+        session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
+            callback({
+                responseHeaders: {
+                    ...details.responseHeaders,
+                    'Content-Security-Policy': ['default-src child-src \'self\''
+                  + ' object-src \'none\''
+                  + ' script-src \'self\';'
+                  + ' frame-src \'self\';'
+                    // + ' style-src \'unsafe-inline\';'
+                  + ' worker-src \'self\''
+                    ]
+                }
+            });
+        });
+    }
+
     // Create the browser window.
-    mainWindow = new BrowserWindow({
+    const mainWindow = new BrowserWindow({
         width: 800,
         height: 600,
         webPreferences: {
             nodeIntegration: true,
-        }
+        },
+
     });
 
     // and load the index.html of the app.
-    mainWindow.loadFile(path.join(__dirname, 'index.html'));
+    // eslint-disable-next-line no-undef
+    mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
 
+    // Open the DevTools.
     if (isDevMode) {
     // Open the DevTools.
         mainWindow.webContents.openDevTools();
     }
-
-    // Emitted when the window is closed.
-    mainWindow.on('closed', () => {
-    // Dereference the window object, usually you would store windows
-    // in an array if your app supports multi windows, this is the time
-    // when you should delete the corresponding element.
-        mainWindow = null;
-    });
 };
 
 // This method will be called when Electron has finished
@@ -60,7 +69,7 @@ app.on('window-all-closed', () => {
 app.on('activate', () => {
     // On OS X it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
-    if (mainWindow === null) {
+    if (BrowserWindow.getAllWindows().length === 0) {
         createWindow();
     }
 });

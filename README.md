@@ -10,19 +10,19 @@ This boilerplate is my starting point for projects with the following:
 
 It uses [Electron Forge](https://www.electronforge.io/)'s ```create-electron-app``` to create the initial project.
 
-It also incorporates [Babel](https://babeljs.io/) and [Gulp](https://gulpjs.com/).
+It also incorporates [Babel](https://babeljs.io/) and [Webpack](https://webpack.js.org/).
 
 
 Prerequisite: A newish version of [node.js](https://nodejs.org/) should already be installed (v11.15.0 was used here).
 
 This boilerplate was created with the following steps:
 
-## Create a minimal Electron project
+## Create a minimal Electron project with Webpack using the Webpack template
 
 Create a new [Electron](https://electronjs.org/) project using create-electron-app:
 
 ```node
-npx create-electron-app
+npx create-electron-app new_electron_react_bootstrap --template=webpack
 ```
 
 ## Install Babel
@@ -32,6 +32,7 @@ npx create-electron-app
 1. Install Babel:
 
 ```node
+cd new_electron_react_bootstrap
 npm i @babel/core @babel/preset-env @babel/preset-react --save-dev
 ```
 
@@ -46,81 +47,56 @@ npm i @babel/core @babel/preset-env @babel/preset-react --save-dev
   }
 ```
 
-## Install Gulp
-
-[Gulp](https://gulpjs.com/) is used to build the Electron project. One key thing it does is pass JSX files on to Babel for transpiling.
-
-1. Install Gulp:
+3. Webpack needs the Babel loader:
 
 ```node
-npm i gulp gulp-babel gulp-sourcemaps --save-dev
+npm i --save-dev babel-loader
 ```
 
-2. Create the Gulpfile. Create a file called 'gulpfile.js' at the root of the project and add the following to it:
+4. Configure Webpack for the loader. Edit the file `webpack.renderer.config.js` and add the line
+`resolve: { extensions: [".js", ".jsx"] },` right before the `module` section in `module.exports`,
+it should look something like:
+
+```json
+  const rules = require('./webpack.rules');
+
+  rules.push({
+    test: /\.css$/,
+    use: [{ loader: 'style-loader' }, { loader: 'css-loader' }],
+  });
+
+  module.exports = {
+    // Put your normal webpack config below here
+    resolve: { extensions: [".js", ".jsx"] },
+    module: {
+      rules,
+    },
+  };
+```
+
+Edit the file `webpack.rules.js`, adding the following to the `module.exports` array:
+
+```json
+,
+  {
+    test: /\.(js|jsx)$/,
+    exclude: /(node_modules|bower_components)/,
+    loader: "babel-loader",
+  },
+```
+
+5. For Babel ```async``` function support, first install:
+
+```node
+npm i regenerator-runtime core-js --save-dev
+```
+
+6. Then add the following to the top of `renderer.js`:
 
 ```js
-const exec = require('child_process').exec;
-const gulp = require('gulp');
-const babel = require('gulp-babel');
-//const css = require('gulp-clean-css');
-const sourcemaps = require('gulp-sourcemaps');
-
-function html() {
-    return gulp.src('src/index.html')
-        .pipe(gulp.dest('app/'));
-}
-
-function css() {
-    return gulp.src('src/**/*.css')
-//        .pipe(css())
-        .pipe(gulp.dest('app/'));
-}
-
-function js() {
-    console.log("js");
-    return gulp.src(['src/**/*.js', 'src/**/*.jsx'])
-         .pipe(sourcemaps.init())
-         .pipe(babel())
-         .pipe(sourcemaps.write())
-         .pipe(gulp.dest('app/'));
-};
-
-function launch() {
-    return exec(
-        __dirname+'/node_modules/.bin/electron .'
-    ).on('close', () => process.exit());
-}
-
-exports.start = gulp.series(html, css, js, launch);
+import 'core-js/stable';
+import 'regenerator-runtime/runtime';
 ```
-
-3. Replace the script for ```start``` so it runs the Gulp script. In ```package.json``` change the line:
-
-```json
-    "start": "electron-forge start",
-```
-
-which is within the ```start``` block, to:
-
-```json
-    "start": "gulp start",
-```
-
-4. Rename ```index.js```. Later on we'll add a JS file loaded by ```index.html``` that will be the entry point of the render processes. To avoid confusion we'll rename the existing ```index.js``` as ```main.js```.
-
-5. Update ```package.json``` to point to ```main.js```. In ```package.json``` change the line:
-
-```json
-    "main": "src/index.js",
-```
-
-to:
-
-```json
-"main": "app/main.js",
-```
-
-Note that it points to the ```app``` folder, not the ```src```, since ```app``` is where Gulp sends all the processed output, including the output files of Babel.
 
 
 ## Install React
@@ -129,7 +105,7 @@ Note that it points to the ```app``` folder, not the ```src```, since ```app``` 
 1. Install React:
 
 ```node
-npm i react react-dom --save-dev
+npm i react react-dom
 ```
 
 2. We need to enable the use of ```node``` in the browser window. In ```src/main.js``` change the following code block:
@@ -163,22 +139,26 @@ If you don't do this then the simplest things like ```require()``` calls will ge
 import React from 'react';
 
 export default function App() {
-    return <div>I'm the React App</div>;
+    return <div className="container-fluid">
+        <div>I am the React App</div>
+        <div className="alert alert-primary">
+            This is Bootstrap
+        </div>
+    </div>;
 }
 ```
 
-4. Create the main renderer process entry point. Create the file ```src/renderer.js``` and add the following to it:
+4. Replace the contents of the file ```src/renderer.js``` with:
 
 ```js
+import './index.css';
 import React from 'react';
 import ReactDOM from 'react-dom';
-//import {AppContainer} from 'react-hot-loader';
-//require('bootstrap');
+import App from './App';
 
 const render = () => {
-  const App = require('./App').default;
   ReactDOM.render(<App />, document.getElementById('App'));
-}
+};
 
 render();
 if (module.hot) {
@@ -186,14 +166,19 @@ if (module.hot) {
 }
 ```
 
-5. Update ```index.html``` to load ```src/renderer.js``` and work with it. Modify the contents of the ```<body>``` tag so it reads:
+5. Update ```index.html```. Modify the contents of the ```<body>``` tag so it reads:
 
 ```html
   <body>
     <div id="App">Oh no.</div>
-    <script src="./renderer.js"></script>
   </body>
 ```
+
+6. At this point you should be able to run the 'npm-start' task and the app will launch.
+There should be one warning:
+
+`Electron Security Warning (Insecure Content-Security-Policy)`
+
 
 ## Install React Developer Tools
 React Developer Tools is a Chrome extension that adds React debugging tools to Chrome Developer Tools. In Electron it is part of the [DevTools Extension](https://electronjs.org/docs/tutorial/devtools-extension).
@@ -238,6 +223,43 @@ with
     mainWindow.webContents.openDevTools();
   }
 ```
+
+5. More on the `Electron Security Warning (Insecure Content-Security-Policy)` warning:
+
+You can add a Content-Security-Policy to main.js to get rid of that warning, however
+at the time of this writing there's a bug in electron such that you can't manually
+open the devTools window (<https://github.com/electron/electron/issues/20069)>.
+
+The following was added to the `createWindow()` function in `main.js`, right before the call
+to `mainWindow = new BrowserWindow(` line:
+
+```js
+    // TODO isDevMode test is a hack to get the devTools to show up, as it's
+    // currently broken
+    if (!isDevMode) {
+        session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
+            callback({
+                responseHeaders: {
+                    ...details.responseHeaders,
+                    'Content-Security-Policy': ['default-src child-src \'self\''
+                     + ' object-src \'none\''
+                     + ' script-src \'self\';'
+                     + ' frame-src \'self\';'
+                     + ' style-src \'unsafe-inline\';'
+                     + ' worker-src \'self\''
+                    ]
+                }
+            });
+        });
+    }
+```
+
+```session``` should also be added to the ```require('electron')``` line:
+
+```js
+const { app, BrowserWindow, session } = require('electron');
+```
+
 
 ## Install Jest
 [Jest](https://jestjs.io/) is a test platform.
@@ -375,13 +397,7 @@ module.exports = {
 };
 ```
 
-6. For ```async``` function support, first install:
-
-```node
-npm i regenerator-runtime
-```
-
-7. Create a file ```src/setupTests.js``` and add the following to it:
+6. For ```async``` function support, create a file ```src/setupTests.js``` and add the following to it:
 
 ```js
 import 'regenerator-runtime/runtime';
@@ -427,6 +443,7 @@ Ran all test suites related to changed files.
 
 Watch Usage: Press w to show more.
 ```
+
 
 ## Install ESLint
 [ESLint](https://eslint.org/) is a Javascript linter that statically analyzes the code.
@@ -510,7 +527,7 @@ Successfully created .eslintrc.js file in /home/albert/Projects/Javascript/test/
         "react/prefer-stateless-function": 0
 ```
 
-4. Update ```eslintrc.js``` to remove React version warning. Add the following to the ```module.settings``` object in ```eslintrc.js```:
+4. Update ```eslintrc.js``` to remove React version warning. Add the following to the ```module.exports``` object in ```eslintrc.js```:
 
 ```js
     'settings': {
@@ -520,10 +537,16 @@ Successfully created .eslintrc.js file in /home/albert/Projects/Javascript/test/
     },
 ```
 
-5. Update ```eslintrc.js``` to support Jest. Add the following to the ```env``` property of the  ```module.settings``` object in ```eslintrc.js```:
+5. Update ```eslintrc.js``` to support Jest. Add the following to the ```env``` property of the  ```module.exports``` object in ```eslintrc.js```:
 
 ```js
         'jest': true,
+```
+
+6. Update the lint script in `package.json`, replacing the `lint` entry in `scripts` with:
+
+```json
+    "lint": "eslint --cache --color --ext .jsx,.js src",
 ```
 
 
@@ -559,8 +582,32 @@ npm i bootstrap
 npm i jquery popper.js
 ```
 
-3. Update ```index.html``` with the Bootstrap CSS. Add the following to the ```<head>``` section of ```index.html```:
+3. Update ```renderer.js``` with the Bootstrap CSS. Add the following to the imports section:
 
-```html
-  <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
+```js
+import 'bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
+```
+
+
+## Install JSDoc
+[JSDoc](https://jsdoc.app/about-getting-started.html) is an API documentation generator for Javascript.
+
+1. Install JSDoc:
+
+```node
+npm i jsdoc --save-dev
+```
+
+2. Add a script to `package.json`:
+
+```json
+  "jsdoc": "jsdoc src -r -d docs",
+```
+
+3. Exclude the generated docs from Git. Add the following to the bottom of the `.gitignore` file:
+
+```txt
+# Docs Output
+docs/
 ```

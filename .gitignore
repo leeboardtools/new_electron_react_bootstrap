@@ -90,3 +90,6 @@ out/
 
 # Gulp Output
 app/
+
+# Docs Output
+docs/
